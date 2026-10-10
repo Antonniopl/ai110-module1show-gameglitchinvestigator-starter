@@ -1,51 +1,31 @@
-# 💭 Reflection: Game Glitch Investigator
-
-Answer each question in 3 to 5 sentences. Be specific and honest about what actually happened while you worked. This is about your process, not trying to sound perfect.
+# Reflection: Game Glitch Investigator
 
 ## 1. What was broken when you started?
 
-- What did the game look like the first time you ran it?
-- List at least two concrete bugs you noticed at the start  
-  (for example: "the hints were backwards").
+Codex inspected the original Streamlit game and reproduced defects using its unchanged helper functions.
+The initial targets are incorrect high/low hints and invalid-input handling; string comparisons and scoring also need repair.
+These observations are automated checks performed by Codex, not personal gameplay reports.
+Personal play observations and independent review have not been supplied.
 
-**Bug Reproduction Log**
-
-Document at least 3 bugs you found. Add rows as needed.
+### Bug Reproduction Log — Codex helper checks
 
 | Input | Expected Behavior | Actual Behavior | Console Output / Error |
-|-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+|---|---|---|---|
+| `check_guess(60, 50)` | Too High; guess lower | Hint says go higher | `('Too High', '📈 Go HIGHER!')`; no exception |
+| `check_guess(9, "50")` | Numeric comparison: Too Low | Lexicographic comparison reports Too High | `('Too High', '📈 Go HIGHER!')`; no exception |
+| `parse_guess("40.9")` | Reject a decimal | Converts to 40 and accepts it | `(True, 40, None)`; no exception |
+| `parse_guess("-1")` | Reject below-range guess | Accepts -1 | `(True, -1, None)`; no exception |
+| `update_score(0, "Too High", 2)` | Apply a consistent wrong-guess penalty | Adds 5 points | `5`; no exception |
 
----
+Reproduction command: `python tools/reproduce_starter_bugs.py`.
+Fresh output and original source are preserved in `evidence/`.
+Original starter tests also run before repairs so their real baseline failures remain visible.
 
-## 2. How did you use AI as a teammate?
+## Remaining reflection stages
 
-- Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-- Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
-- Give one example of an AI suggestion you did not accept as written (including what the AI suggested, why you rejected or changed it, and how you verified your version). It does not have to be a suggestion that was wrong: over-engineered, out of scope, harder to read, or a poor fit for this codebase all count.
+AI collaboration, repaired-game verification, state explanations, and development habits will be documented after implementation.
+Student-specific experiences will remain unconfirmed unless supplied.
 
----
+### Codex Streamlit AppTest observations
 
-## 3. Debugging and testing your fixes
-
-- How did you decide whether a bug was really fixed?
-- Describe at least one test you ran (manual or using pytest)  
-  and what it showed you about your code.
-- Did AI help you design or understand any tests? How?
-
----
-
-## 4. What did you learn about Streamlit and state?
-
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
-
----
-
-## 5. Looking ahead: your developer habits
-
-- What is one habit or strategy from this project that you want to reuse in future labs or projects?
-  - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI generated code.
+With the original source and a controlled secret of 50, automated UI checks also reproduced decimal 50.9 being accepted as a win, New Game preserving won status and blocking subsequent play, and abc consuming an attempt. These are AppTest results, not student or browser gameplay. The executable reproduction and its fresh output are in tools/reproduce_original_ui.py and evidence/codex_original_ui_results.txt.

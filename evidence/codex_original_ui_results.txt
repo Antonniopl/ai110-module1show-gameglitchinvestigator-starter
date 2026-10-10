@@ -1,0 +1,174 @@
+Command: python tools/reproduce_original_ui.py
+Executed by: Codex
+
+AGENT-RUN STREAMLIT APPTEST: ORIGINAL GAME DEFECT REPRODUCTIONS
+Not student observations; not browser gameplay.
+App: evidence/original_app.py.txt
+App SHA-256: 00f1d1f796dbdf4934ff19dec6ce739510eddb6d5b9e7ade75ba73d758ebea69
+Python: 3.11.13
+Streamlit: 1.60.0
+Control: patch random.randint to return 50; no app-source changes.
+Expected behavior below is an explicit proposed game policy.
+2026-10-09 23:26:08.853 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.l1dcachesize'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.l2cachesize'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.l3cachesize'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.sse4_2'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx1_0'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx2_0'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.bmi1'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.bmi2'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx512f'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx512cd'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx512dq'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx512bw'. Detail: [errno 1] Operation not permitted
+/Users/runner/work/crossbow/crossbow/arrow/cpp/src/arrow/util/cpu_info.cc:242: IOError: sysctlbyname failed for 'hw.optional.avx512vl'. Detail: [errno 1] Operation not permitted
+{
+  "case": "1: Decimal accepted as a winning integer",
+  "input_used": "Fresh Normal game, secret 50; Submit Guess with 50.9.",
+  "expected_behavior": "Reject non-whole-number input; do not convert the guess or award a win.",
+  "actual_behavior": {
+    "state": {
+      "secret": 50,
+      "attempts": 2,
+      "score": 70,
+      "status": "won",
+      "history": [
+        50
+      ]
+    },
+    "messages": {
+      "info": [
+        "Guess a number between 1 and 100. Attempts left: 7"
+      ],
+      "warning": [
+        "Correct!"
+      ],
+      "error": [],
+      "success": [
+        "You won! The secret was 50. Final score: 70"
+      ]
+    }
+  },
+  "console_error": "No app exception; AppTest messages are recorded above.",
+  "defect_assertions": "PASS: defect reproduced"
+}
+{
+  "case": "2: New Game after winning does not create a playable round",
+  "input_used": "After case 1: click New Game, then Submit Guess with 40.",
+  "expected_behavior": "Start a fresh playing round, clear score/history, and process the next valid guess.",
+  "actual_behavior": {
+    "after_new_game": {
+      "state": {
+        "secret": 50,
+        "attempts": 0,
+        "score": 70,
+        "status": "won",
+        "history": [
+          50
+        ]
+      },
+      "messages": {
+        "info": [
+          "Guess a number between 1 and 100. Attempts left: 8"
+        ],
+        "warning": [],
+        "error": [],
+        "success": [
+          "You already won. Start a new game to play again."
+        ]
+      }
+    },
+    "after_submitting_40": {
+      "state": {
+        "secret": 50,
+        "attempts": 0,
+        "score": 70,
+        "status": "won",
+        "history": [
+          50
+        ]
+      },
+      "messages": {
+        "info": [
+          "Guess a number between 1 and 100. Attempts left: 8"
+        ],
+        "warning": [],
+        "error": [],
+        "success": [
+          "You already won. Start a new game to play again."
+        ]
+      }
+    }
+  },
+  "console_error": "No app exception; AppTest messages are recorded above.",
+  "defect_assertions": "PASS: defect reproduced"
+}
+2026-10-09 23:26:10.610 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+{
+  "case": "3: Hint points away from the secret",
+  "input_used": "Fresh Normal game, secret 50; Submit Guess with 60.",
+  "expected_behavior": "60 is greater than 50, so tell the player to guess LOWER.",
+  "actual_behavior": {
+    "state": {
+      "secret": 50,
+      "attempts": 2,
+      "score": 5,
+      "status": "playing",
+      "history": [
+        60
+      ]
+    },
+    "messages": {
+      "info": [
+        "Guess a number between 1 and 100. Attempts left: 7"
+      ],
+      "warning": [
+        "Go HIGHER!"
+      ],
+      "error": [],
+      "success": []
+    }
+  },
+  "console_error": "No app exception; AppTest messages are recorded above.",
+  "defect_assertions": "PASS: defect reproduced"
+}
+2026-10-09 23:26:10.714 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+{
+  "case": "4: Invalid input consumes an attempt",
+  "input_used": "Fresh Normal game; Submit Guess with abc.",
+  "expected_behavior": "Display a validation error without consuming a valid guess attempt.",
+  "actual_behavior": {
+    "before": {
+      "secret": 50,
+      "attempts": 1,
+      "score": 0,
+      "status": "playing",
+      "history": []
+    },
+    "after": {
+      "secret": 50,
+      "attempts": 2,
+      "score": 0,
+      "status": "playing",
+      "history": [
+        "abc"
+      ]
+    },
+    "messages": {
+      "info": [
+        "Guess a number between 1 and 100. Attempts left: 7"
+      ],
+      "warning": [],
+      "error": [
+        "That is not a number."
+      ],
+      "success": []
+    }
+  },
+  "console_error": "No app exception; AppTest messages are recorded above.",
+  "defect_assertions": "PASS: defect reproduced"
+}
+PASS: 4 defects reproduced by automated AppTest; original app source unchanged.
+
+Exit status: 0

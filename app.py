@@ -11,6 +11,7 @@ def get_range_for_difficulty(difficulty: str):
     return 1, 100
 
 
+# FIXME B3: Reject decimal and out-of-range input before using an attempt.
 def parse_guess(raw: str):
     if raw is None:
         return False, None, "Enter a guess."
@@ -29,6 +30,7 @@ def parse_guess(raw: str):
     return True, value, None
 
 
+# FIXME B1/B2: Correct hint direction and remove string-number comparison.
 def check_guess(guess, secret):
     if guess == secret:
         return "Win", "🎉 Correct!"

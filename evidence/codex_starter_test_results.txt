@@ -1,0 +1,79 @@
+Executed by: Codex
+Python: 3.11.13
+Command: python -m pytest -q -ra
+
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+______________________________ test_winning_guess ______________________________
+
+    def test_winning_guess():
+        # If the secret is 50 and guess is 50, it should be a win
+>       result = check_guess(50, 50)
+                 ^^^^^^^^^^^^^^^^^^^
+
+tests/test_game_logic.py:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+guess = 50, secret = 50
+
+    def check_guess(guess, secret):
+        """
+        Compare guess to secret and return (outcome, message).
+    
+        outcome examples: "Win", "Too High", "Too Low"
+        """
+>       raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+E       NotImplementedError: Refactor this function from app.py into logic_utils.py
+
+logic_utils.py:21: NotImplementedError
+_____________________________ test_guess_too_high ______________________________
+
+    def test_guess_too_high():
+        # If secret is 50 and guess is 60, hint should be "Too High"
+>       result = check_guess(60, 50)
+                 ^^^^^^^^^^^^^^^^^^^
+
+tests/test_game_logic.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+guess = 60, secret = 50
+
+    def check_guess(guess, secret):
+        """
+        Compare guess to secret and return (outcome, message).
+    
+        outcome examples: "Win", "Too High", "Too Low"
+        """
+>       raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+E       NotImplementedError: Refactor this function from app.py into logic_utils.py
+
+logic_utils.py:21: NotImplementedError
+______________________________ test_guess_too_low ______________________________
+
+    def test_guess_too_low():
+        # If secret is 50 and guess is 40, hint should be "Too Low"
+>       result = check_guess(40, 50)
+                 ^^^^^^^^^^^^^^^^^^^
+
+tests/test_game_logic.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+guess = 40, secret = 50
+
+    def check_guess(guess, secret):
+        """
+        Compare guess to secret and return (outcome, message).
+    
+        outcome examples: "Win", "Too High", "Too Low"
+        """
+>       raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+E       NotImplementedError: Refactor this function from app.py into logic_utils.py
+
+logic_utils.py:21: NotImplementedError
+=========================== short test summary info ============================
+FAILED tests/test_game_logic.py::test_winning_guess - NotImplementedError: Re...
+FAILED tests/test_game_logic.py::test_guess_too_high - NotImplementedError: R...
+FAILED tests/test_game_logic.py::test_guess_too_low - NotImplementedError: Re...
+3 failed in 0.06s
+
+Exit status: 1
