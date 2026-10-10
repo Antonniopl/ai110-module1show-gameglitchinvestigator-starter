@@ -1,0 +1,9 @@
+Original starter helper reproduction (not a browser play session)
+Verified app.py Git blob: 6e097e34bbf88dbb6985e45705ac11c5983234ca
+check_guess(60, 50) -> ('Too High', '📈 Go HIGHER!')
+check_guess(40, 50) -> ('Too Low', '📉 Go LOWER!')
+check_guess(9, '50') -> ('Too High', '📈 Go HIGHER!')
+parse_guess('40.9',) -> (True, 40, None)
+parse_guess('-1',) -> (True, -1, None)
+update_score(0, 'Too High', 2) -> 5
+All six calls completed; no runtime exception was raised.

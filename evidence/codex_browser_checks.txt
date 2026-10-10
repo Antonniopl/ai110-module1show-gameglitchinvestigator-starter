@@ -1,0 +1,21 @@
+Executed by: Codex using the in-app browser
+Target: repaired app at http://127.0.0.1:8502/
+These are agent-driven real-browser checks, not student gameplay observations.
+
+Normal difficulty, randomly generated secret 15 (read from Developer Debug Info).
+1. Initial screen: 8 attempts available, score 0, empty guess field.
+2. Submit 40.9: "Enter a whole number (no decimals)." Attempts remain 0,
+   score remains 0, history empty, status playing.
+3. Submit 16: "Too High. Guess LOWER!" Score -5, 7 attempts left.
+4. Submit 14: "Too Low. Guess HIGHER!" Score -10, 6 attempts left.
+   Secret remains 15 across these normal submissions.
+5. Submit 15: win message, final score 70, attempts used 3.
+   Guess field and Submit Guess button are disabled.
+   Screenshot saved as codex_browser_win.jpg.
+6. Click New Game: score 0, 8 attempts left, empty enabled guess field,
+   enabled Submit Guess button, previous win message gone.
+
+All six checks matched the documented behavior. No application error appeared.
+The full automated AppTest suite separately covers loss/reset, difficulty changes,
+additional invalid inputs, and hint-toggle stability; those were not all repeated
+in this browser smoke check.

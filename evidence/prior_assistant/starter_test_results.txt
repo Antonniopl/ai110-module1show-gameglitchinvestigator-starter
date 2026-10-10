@@ -1,0 +1,28 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+______________________________ test_winning_guess ______________________________
+tests/test_game_logic.py:5: in test_winning_guess
+    result = check_guess(50, 50)
+             ^^^^^^^^^^^^^^^^^^^
+logic_utils.py:21: in check_guess
+    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+E   NotImplementedError: Refactor this function from app.py into logic_utils.py
+_____________________________ test_guess_too_high ______________________________
+tests/test_game_logic.py:10: in test_guess_too_high
+    result = check_guess(60, 50)
+             ^^^^^^^^^^^^^^^^^^^
+logic_utils.py:21: in check_guess
+    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+E   NotImplementedError: Refactor this function from app.py into logic_utils.py
+______________________________ test_guess_too_low ______________________________
+tests/test_game_logic.py:15: in test_guess_too_low
+    result = check_guess(40, 50)
+             ^^^^^^^^^^^^^^^^^^^
+logic_utils.py:21: in check_guess
+    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+E   NotImplementedError: Refactor this function from app.py into logic_utils.py
+=========================== short test summary info ============================
+FAILED tests/test_game_logic.py::test_winning_guess - NotImplementedError: Refactor this function from app.py into logic_utils.py
+FAILED tests/test_game_logic.py::test_guess_too_high - NotImplementedError: Refactor this function from app.py into logic_utils.py
+FAILED tests/test_game_logic.py::test_guess_too_low - NotImplementedError: Refactor this function from app.py into logic_utils.py
+3 failed in 0.08s

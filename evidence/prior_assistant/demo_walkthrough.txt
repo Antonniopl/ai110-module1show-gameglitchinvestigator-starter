@@ -1,0 +1,6 @@
+Logic demo: Normal difficulty, fixed secret 50, 8 attempts, score 0
+Input 40: Too Low. Guess HIGHER! Score=-5; attempts=1; status=playing
+Input 70: Too High. Guess LOWER! Score=-10; attempts=2; status=playing
+Input 50: Correct! Score=70; attempts=3; status=won
+Another guess after the win changes nothing: True
+Fresh round: score=0; attempts=0; status=playing; history=[]
