@@ -1,54 +1,90 @@
-# 🎮 Game Glitch Investigator: The Impossible Guesser
+# Game Glitch Investigator: The Repaired Guesser
 
-## 🚨 The Situation
+A Python and Streamlit number-guessing game repaired from the CodePath starter. Choose a difficulty, enter whole-number guesses, and follow the hints to find the secret before running out of attempts.
 
-You asked an AI to build a simple "Number Guessing Game" using Streamlit.
-It wrote the code, ran away, and now the game is unplayable. 
+[GitHub repository](https://github.com/Antonniopl/ai110-module1show-gameglitchinvestigator-starter)
 
-- You can't win.
-- The hints lie to you.
-- The secret number seems to have commitment issues.
+## Setup
 
-## 🛠️ Setup
+Use Python 3.10 or newer. From the project directory:
 
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run the broken app: `python -m streamlit run app.py`
-
-## 🕵️‍♂️ Your Mission
-
-1. **Play the game.** Open the "Developer Debug Info" tab in the app to see the secret number. Try to win.
-2. **Find the State Bug.** Why does the secret number change every time you click "Submit"? Ask ChatGPT: *"How do I keep a variable from resetting in Streamlit when I click a button?"*
-3. **Fix the Logic.** The hints ("Higher/Lower") are wrong. Fix them.
-4. **Refactor & Test.** - Move the logic into `logic_utils.py`.
-   - Run `pytest` in your terminal.
-   - Keep fixing until all tests pass!
-
-## 📝 Document Your Experience
-
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
-
-## 📸 Demo Walkthrough
-
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
-
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
-
-**Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
-
-## 🧪 Test Results
-
-```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
 ```
 
-## 🚀 Stretch Features
+On Windows, use `.venv\Scripts\activate` instead of the `source` command. Open the local URL printed by Streamlit.
 
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+Run the complete test suite with:
+
+```bash
+python -m pytest -q -ra
+```
+
+## Game rules
+
+| Difficulty | Secret range, inclusive | Attempts |
+|---|---|---|
+| Easy | 1–20 | 6 |
+| Normal | 1–100 | 8 |
+| Hard | 1–50 | 5 |
+
+Each round starts at zero points. A valid wrong guess costs 5 points. A win adds `max(10, 100 - 10 * (attempt_number - 1))` points: 100 on the first valid attempt, 90 on the second, and so on. Negative scores are allowed. This is the repair's explicit scoring policy; the starter does not define a complete scoring specification.
+
+Blank input, decimals, letters, and numbers outside the active range show an error without using an attempt or changing the score or history. Whitespace and a leading plus sign are accepted for valid integers. A correct final-attempt guess wins. New Game and difficulty changes reset the whole round; a finished round accepts no further guesses.
+
+## Document Your Experience
+
+- The objective is to find the secret within the selected attempt limit.
+- Reproduced bugs included reversed hints, string comparisons, decimal truncation, missing range validation, and a wrong guess increasing the score. Source review also found incomplete resets and invalid input consuming attempts.
+- Core rules now live in `logic_utils.py`. The interface uses callbacks to update round state before rendering the counters and messages. One reset function starts every round consistently.
+
+The original three starter tests are preserved. Their result-string contract is implemented by `check_guess()`, with hint text supplied separately by `get_hint()`. See [reflection.md](reflection.md) for the reproduction log and the distinction between assistant verification and personal reflection, and [REVIEW_NOTES.md](REVIEW_NOTES.md) for review decisions.
+
+## Demo Walkthrough
+
+This deterministic example uses Normal difficulty and a fixed secret of 50. It is checked by `test_exact_demo_walkthrough` and can be reproduced with `python -m tools.demo_walkthrough`. A browser round chooses its own random secret.
+
+1. Start with score 0, no guesses used, and eight attempts available.
+2. Enter `40`. The game says Too Low and tells the player to guess HIGHER. Score becomes -5 and seven attempts remain.
+3. Enter `70`. The game says Too High and tells the player to guess LOWER. Score becomes -10 and six attempts remain.
+4. Enter `50`. The game wins on attempt three. The 80-point bonus produces a final score of 70.
+5. Further guesses do not change the completed round.
+6. Select New Game. The score, attempts, history, and status reset, and the app generates a secret within the selected range.
+
+The Developer Debug Info panel reveals the current secret for checking the game during this learning exercise.
+
+## Test Results
+
+The complete suite was executed with Streamlit installed, including the real Streamlit `AppTest` callback checks. The previous handoff's result of 105 passed and one skipped module did not execute its 13 UI cases; the current full-suite result replaces that incomplete verification.
+
+```text
+Executed by: Codex
+Command: python -m pytest -q -ra
+Python: 3.11.13
+Streamlit: 1.60.0
+pytest: 9.1.1
+
+........................................................................ [ 61%]
+..............................................                           [100%]
+118 passed in 4.34s
+
+Exit status: 0
+```
+
+See `test_results.txt` for the recorded command output. The suite covers the original comparisons, hint direction, scoring, invalid inputs, range boundaries, final-attempt wins, complete resets, difficulty changes, and UI counter updates. `AppTest` runs the application and its callbacks. Codex also checked decimal rejection, both hint directions, stable secrets, winning, and New Game in a real browser; see `evidence/codex_browser_checks.txt` and its win screenshot. These checks were performed by Codex, not supplied as student observations.
+
+## Stretch Features
+
+**Challenge 1: Advanced Edge-Case Testing** is implemented. Tests include negative numbers, decimals, very large values, empty input, inclusive boundaries, and a win on the final attempt. [ai_interactions.md](ai_interactions.md) records the available AI-assistance evidence and the reason for each edge case. No other optional challenge is claimed.
+
+## Files
+
+- `app.py`: Streamlit interface and callbacks.
+- `logic_utils.py`: input validation, comparison, hints, scoring, and round transitions.
+- `tests/test_game_logic.py` and `tests/test_app.py`: rule and interface regression tests.
+- `tools/`: deterministic walkthrough and original-helper reproduction scripts.
+- `evidence/`: preserved original source and execution evidence.
+- `reflection.md`, `ai_interactions.md`, and `REVIEW_NOTES.md`: factual project notes and review history.

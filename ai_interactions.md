@@ -1,76 +1,36 @@
 # AI Interactions Log
 
-> **Stretch features only.** Only fill in the sections that apply to stretch features you attempted. If you did not attempt a stretch feature, leave its section blank or delete it. This file is not required for the core project.
+This log distinguishes available conversation evidence from the earlier handoff's descriptions. The personal-reflection limitation is recorded in `reflection.md`.
 
----
+## Request and assistance
 
-## Agent Workflow (SF8)
+The user supplied a prepared project handoff, asked whether Codex could complete it, and later requested completion. Codex used the supplied repair candidate as a starting point, checked it against the actual starter repository, ran the tests with Streamlit available, and reviewed the documentation for unsupported claims.
 
-> Document your experience using an AI agent (e.g., Cursor Agent, Claude, Copilot) to make multi-step changes autonomously.
+The handoff attributes its initial generation to ChatGPT and records this earlier request:
 
-**What task did you give the agent?**
+> Can you thoroughly review this and complete what you can? I also need you to include very simple instructions on what I need to do for submission for this and anything you cannot do.
 
-<!-- Describe the goal you asked the agent to accomplish -->
+That quotation is transcribed from the supplied handoff, not independently verified against a separate chat export. Neither the provided history nor the current conversation contains a distinct student-authored prompt asking for each individual edge-case test. The table therefore reports the tests and their rationale without inventing prompts.
 
-**What did the agent do?**
+## Test Generation — Challenge 1
 
-<!-- List the steps the agent took (files edited, commands run, etc.) -->
+| Edge case | AI-assisted regression coverage | Why chosen |
+|---|---|---|
+| Negative number, `-1` | Invalid-input parsing and unchanged-round checks. | It is below every difficulty's minimum and must not consume an attempt. |
+| Decimal, `40.9` | Decimal rejection and unchanged-round checks. | The original parser silently changed it to 40. |
+| Extremely large input, including 5,000 digits | Invalid-input parsing and unchanged-round checks. | The app should return an error instead of crashing or changing the round. |
+| Empty input and letters | Error handling in logic and relevant UI checks. | A submit click should not count as a guess before validation succeeds. |
+| Lowest and highest allowed values | Inclusive-boundary tests. | Both endpoints are legal guesses. |
+| Correct guess on the final attempt | Final-attempt win regression. | A win must take priority over the exhausted-attempt loss condition. |
 
-**What did you have to verify or fix manually?**
+The actual full-suite output appears in `test_results.txt` and the README. It includes Streamlit `AppTest` coverage, which the earlier handoff skipped because Streamlit was unavailable there.
 
-<!-- Describe anything the agent got wrong or that required human review -->
+## Accepted technical proposal
 
----
+The candidate separates `check_guess()` from `get_hint()`, uses integer comparisons, and preserves the three starter tests. Codex retained that design after verifying comparison outcomes and hint direction with regression tests.
 
-## Test Generation (SF7)
+## Correction to an AI-prepared draft
 
-> Document how you used AI to help generate or improve tests.
+The handoff's draft claimed that a wording-only HIGHER/LOWER fix had been suggested and rejected. The available record contains no transcript establishing that exchange, so Codex rejected the claim as unsupported and removed it. The technical observation remains valid—changing words alone would not fix string comparisons—but it is not presented as an interaction that actually occurred.
 
-| Edge Case | Prompt Used | AI-Suggested Test | Did It Pass? | Your Reasoning |
-|-----------|-------------|-------------------|--------------|----------------|
-| | | | | |
-| | | | | |
-| | | | | |
-
----
-
-## Linting & Style (SF9)
-
-> Document your use of AI for linting or code style improvements.
-
-**Prompt used:**
-
-```
-<!-- Paste the prompt you gave the AI -->
-```
-
-**Linting output before:**
-
-```
-<!-- Paste relevant linter warnings/errors -->
-```
-
-**Changes applied:**
-
-<!-- Describe what you changed based on the AI's suggestions -->
-
----
-
-## Model Comparison (SF11)
-
-> Compare two AI models on the same task.
-
-**Task given to both models:**
-
-<!-- Describe what you asked each model to do -->
-
-| | Model A | Model B |
-|-|---------|---------|
-| **Model name** | | |
-| **Response summary** | | |
-| **More Pythonic?** | | |
-| **Clearer explanation?** | | |
-
-**Which did you prefer and why?**
-
-<!-- Your conclusion -->
+The draft also pointed to a completed local verification entry that was still a placeholder. The final documentation instead links to the current recorded test output.
